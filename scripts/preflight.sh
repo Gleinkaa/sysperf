@@ -58,13 +58,12 @@ if [[ -f .env.example ]]; then
     [[ -z "${line// }" ]] && continue
     KEY="${line%%=*}"; KEY="${KEY// }"
     [[ -z "$KEY" ]] && continue
-    DEFAULT="${line#*=}"
-    # Optional keys (have a default value in .env.example) don't need to be set.
-    if [[ -z "${!KEY:-}" ]]; then
-      if [[ -f .env ]] && grep -q "^${KEY}=" .env; then :;
-      elif [[ -n "$DEFAULT" ]]; then :;   # documented default ⇒ optional
-      else MISSING="$MISSING $KEY"; fi
-    fi
+    # sysperf requires NO env vars: every key in .env.example is optional. An empty
+    # example value (e.g. SYSPERF_CONFIG=) means "use the built-in default", NOT "a
+    # required secret you must fill in", so a declared key is never flagged "missing".
+    # (The generic template treated an empty example value as a required secret, which
+    # wrongly failed SYSPERF_CONFIG= and aborted start.sh before the GUI could launch.)
+    :
   done < .env.example
   [[ -z "$MISSING" ]] && ok "all required .env.example keys satisfied" \
                        || fail "missing required env vars:$MISSING"
