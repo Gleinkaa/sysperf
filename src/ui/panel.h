@@ -3,7 +3,9 @@
 // MainWindow updates each tick. Pure layout glue; owns no collector state.
 #pragma once
 
+#include <QGridLayout>
 #include <QHash>
+#include <QLabel>
 #include <QString>
 #include <QWidget>
 
@@ -11,8 +13,6 @@ namespace sysperf {
 
 class GraphWidget;
 class CoreBars;
-class QGridLayout;
-class QLabel;
 
 class Panel : public QWidget {
     Q_OBJECT

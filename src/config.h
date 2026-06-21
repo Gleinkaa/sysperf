@@ -5,7 +5,7 @@
 
 #include <string>
 
-class QStringList;
+#include <QStringList>
 
 namespace sysperf {
 
