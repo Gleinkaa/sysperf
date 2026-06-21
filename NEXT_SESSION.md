@@ -1,5 +1,15 @@
 # Next session — hand-off instructions
 
+> ## ✅ Good from our side (2026-06-21)
+> All three reported issues are fixed, committed, and pushed (`master` @ `29f067a`).
+> The build compiles 100% and all 7 CTests pass (confirmed on your Ubuntu run in issue2.md),
+> and the `start.sh` preflight blocker is resolved.
+>
+> **The only thing left is to run it on your Linux box** — we can't launch the GUI from
+> Windows. Please `git pull` and run `./scripts/start.sh`; the sysperf window should now
+> open. If it does, issue2 is closed. See **What to verify** below.
+> If anything is still broken, drop the output in a new `issue3.md` + push.
+
 ## What was fixed (2026-06-21)
 
 ### Bug 1 (issue.md) — Qt6 compilation errors
