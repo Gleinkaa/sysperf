@@ -1,0 +1,20 @@
+{
+  "_comment": "Default config for the sysperf desktop GUI. No secrets, no network port (this is not a server). These values mirror the app's compiled-in defaults; the app loads this file at startup when present (see config/README.md). Layered at runtime by .env / CLI flags.",
+  "collector": {
+    "interval_ms": 1000,
+    "history_seconds": 60,
+    "proc_root": "/proc",
+    "sys_root": "/sys"
+  },
+  "budget": {
+    "pss_mb_warn": 50,
+    "cpu_pct_warn": 1.0
+  },
+  "ui": {
+    "theme_hint": "system",
+    "start_panel": "cpu"
+  },
+  "logging": {
+    "level": "info"
+  }
+}

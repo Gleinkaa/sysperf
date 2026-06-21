@@ -1,0 +1,45 @@
+# Generated / local
+release.json
+.env
+*.local.json
+
+# Generated version header (CMake configures it from version.txt)
+src/version.h
+
+# CMake / C++ build output
+build/
+build-*/
+out/
+cmake-build-*/
+CMakeCache.txt
+CMakeFiles/
+*.o
+*.obj
+*.a
+*.so
+*.so.*
+*.dylib
+compile_commands.json
+
+# Packaging artifacts
+packaging/appimage/AppDir/
+packaging/appimage/*.AppImage
+packaging/appimage/tools/
+*.deb
+*.ddeb
+*.buildinfo
+*.changes
+debian/.debhelper/
+debian/sysperf/
+debian/files
+debian/*.substvars
+debian/*.log
+obj-*/
+
+# Editor / OS
+.vscode/
+.idea/
+.cache/
+.DS_Store
+Thumbs.db
+desktop.ini

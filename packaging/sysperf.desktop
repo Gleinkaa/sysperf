@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=sysperf
+GenericName=System Performance Monitor
+Comment=Lightweight CPU/Memory/Disk/Network/GPU performance monitor
+Exec=sysperf
+Icon=sysperf
+Terminal=false
+Categories=System;Monitor;Utility;
+Keywords=performance;monitor;cpu;memory;gpu;disk;network;system;
+StartupNotify=true

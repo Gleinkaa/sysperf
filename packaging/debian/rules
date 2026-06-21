@@ -1,0 +1,14 @@
+#!/usr/bin/make -f
+# Debian build rules. debhelper drives CMake; dh_shlibdeps generates Depends.
+export DEB_BUILD_MAINT_OPTIONS = hardening=+all
+
+%:
+	dh $@ --buildsystem=cmake
+
+# Build the GUI + tests; tests run via dh_auto_test (ctest) below.
+override_dh_auto_configure:
+	dh_auto_configure -- -DCMAKE_BUILD_TYPE=Release -DSYSPERF_BUILD_TESTS=ON
+
+# Run the fixture/budget tests during the package build.
+override_dh_auto_test:
+	dh_auto_test || (echo "ctest failed during package build" && exit 1)

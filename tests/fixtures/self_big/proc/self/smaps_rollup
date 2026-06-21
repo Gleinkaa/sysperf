@@ -1,0 +1,7 @@
+00000000-ffffffffffff ---p 00000000 00:00 0                              [rollup]
+Rss:              120000 kB
+Pss:               80000 kB
+Pss_Anon:          70000 kB
+Pss_File:          10000 kB
+Shared_Clean:      40000 kB
+Private_Dirty:     60000 kB

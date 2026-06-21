@@ -1,0 +1,49 @@
+{
+  "version": 3,
+  "cmakeMinimumRequired": { "major": 3, "minor": 21, "patch": 0 },
+  "configurePresets": [
+    {
+      "name": "default",
+      "displayName": "Release",
+      "binaryDir": "${sourceDir}/build",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release"
+      }
+    },
+    {
+      "name": "debug-asan",
+      "displayName": "Debug + ASan/UBSan",
+      "binaryDir": "${sourceDir}/build-debug-asan",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "SYSPERF_SANITIZE": "ON"
+      }
+    },
+    {
+      "name": "core-only",
+      "displayName": "Core + tests, no Qt",
+      "binaryDir": "${sourceDir}/build-core",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "SYSPERF_BUILD_GUI": "OFF"
+      }
+    }
+  ],
+  "buildPresets": [
+    { "name": "default", "configurePreset": "default" },
+    { "name": "debug-asan", "configurePreset": "debug-asan" },
+    { "name": "core-only", "configurePreset": "core-only" }
+  ],
+  "testPresets": [
+    {
+      "name": "default",
+      "configurePreset": "default",
+      "output": { "outputOnFailure": true }
+    },
+    {
+      "name": "core-only",
+      "configurePreset": "core-only",
+      "output": { "outputOnFailure": true }
+    }
+  ]
+}

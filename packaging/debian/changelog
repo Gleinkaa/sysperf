@@ -1,0 +1,8 @@
+sysperf (0.1.0) unstable; urgency=medium
+
+  * Initial release: Performance-tab monitor (CPU/Memory/Disk/Network/GPU) with
+    rolling 60-second graphs, worker-thread 1 Hz collector, honest Linux memory
+    semantics, NVML + DRM fdinfo GPU collectors with graceful degradation, and a
+    self-instrumentation budget guardrail.
+
+ -- sysperf contributors <sysperf@example.invalid>  Sun, 21 Jun 2026 00:00:00 +0000

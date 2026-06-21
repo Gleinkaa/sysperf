@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Generic line-graph glyph. No hardware/vendor references. -->
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128">
+  <rect x="8" y="8" width="112" height="112" rx="16" fill="#1f2733"/>
+  <g fill="none" stroke="#3a4757" stroke-width="2">
+    <line x1="20" y1="40" x2="108" y2="40"/>
+    <line x1="20" y1="64" x2="108" y2="64"/>
+    <line x1="20" y1="88" x2="108" y2="88"/>
+  </g>
+  <polygon points="20,96 36,72 52,82 68,48 84,60 100,32 108,32 108,96"
+           fill="#2e9ef0" fill-opacity="0.25"/>
+  <polyline points="20,96 36,72 52,82 68,48 84,60 100,32 108,32"
+            fill="none" stroke="#2e9ef0" stroke-width="4"
+            stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

@@ -1,0 +1,21 @@
+# Normalise line endings so this Windows-hosted repo builds cleanly on Linux.
+# Everything is LF in the repo and in the working tree (shell scripts and C++ on
+# Linux choke on CRLF); only the Windows PowerShell launcher keeps CRLF.
+* text=auto eol=lf
+
+*.sh        text eol=lf
+*.cpp       text eol=lf
+*.h         text eol=lf
+*.in        text eol=lf
+CMakeLists.txt  text eol=lf
+*.cmake     text eol=lf
+*.json      text eol=lf
+*.md        text eol=lf
+*.desktop   text eol=lf
+*.svg       text eol=lf
+rules       text eol=lf
+
+*.ps1       text eol=crlf
+
+# Fixtures are byte-significant parse inputs — keep them exactly LF.
+tests/fixtures/** text eol=lf
