@@ -191,6 +191,16 @@ std::vector<GpuSample> FdinfoGpu::update(const std::string& procRoot, const std:
         double t = readDeviceTempC(sysRoot, pdev);
         if (t >= 0.0) g.temp_c = t;
 
+        // ── VRAM: read from PCI device sysfs ──────────────────────────────
+        // amdgpu always publishes these; i915 may not (Intel shares system RAM).
+        std::string pciDev = procutil::join(sysRoot, "bus/pci/devices/" + pdev);
+        uint64_t vramTotal = procutil::readU64(pciDev + "/mem_info_vram_total", 0);
+        uint64_t vramUsed  = procutil::readU64(pciDev + "/mem_info_vram_used", 0);
+        if (vramTotal > 0) {
+            g.mem_total = vramTotal;
+            g.mem_used  = vramUsed;
+        }
+
         out.push_back(std::move(g));
     }
 
