@@ -88,3 +88,38 @@ cmake --build build -j 8
       |                                         ^~~
 [ 84%] Linking CXX executable sysperf
 [100%] Built target sysperf
+
+## Answer
+
+### Root cause
+
+The source file `src/cli_output.cpp` uses **Unicode box-drawing characters** as C++ single-quote character literals:
+
+```cpp
+for (int i = 8; i < 64; ++i) out += '─';
+```
+
+But `'─'` is not a valid `char` literal — it's a *multi-character character constant*, which C++ interprets as a single `int` whose value depends on the platform's endianness. Since `─` (U+2500) is a 3-byte UTF-8 sequence (`E2 94 80`), the compiler packs those bytes into an `int`, producing values like `14849152` — and then warns about the overflow when converting back to `char`.
+
+### Fix
+
+Define the Unicode characters as `constexpr` string_view constants and concatenate their data:
+
+```cpp
+constexpr std::string_view HLINE = u8"─";
+constexpr std::string_view THICK_HLINE = u8"═";
+```
+
+Then replace every occurrence of `'─'` with `HLINE` and `'═'` with `THICK_HLINE`:
+
+```cpp
+for (int i = 8; i < 64; ++i) out += HLINE;
+```
+
+Also added `#include <string_view>` to the includes.
+
+### Files changed
+
+- `src/cli_output.cpp` — defined `HLINE` / `THICK_HLINE` constants, replaced all 7 char-literal occurrences, added `<string_view>` include.
+
+Good from our side
