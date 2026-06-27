@@ -76,6 +76,8 @@ if(SYSPERF_BUILD_GUI)
   add_executable(sysperf
     src/main.cpp
     src/config.cpp
+    src/cli_output.cpp
+    src/sysperf.qrc
     src/collector/worker.cpp
     src/ui/mainwindow.cpp
     src/ui/graphwidget.cpp

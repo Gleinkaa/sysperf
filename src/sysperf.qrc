@@ -1,0 +1,5 @@
+<RCC>
+  <qresource prefix="/">
+    <file alias="app-icon">../packaging/sysperf.svg</file>
+  </qresource>
+</RCC>
