@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <cstdio>
 #include <string>
+#include <string_view>
 
 #include "ui/format.h"
 #include "version.h"
@@ -24,12 +25,15 @@ QString pct(double v) { return fmt::percent(v, 1); }
 QString b(uint64_t n)  { return fmt::bytes(n); }
 QString r(double v)    { return fmt::rate(v); }
 
+constexpr std::string_view HLINE = u8"─"; // ─
+constexpr std::string_view THICK_HLINE = u8"═"; // ═
+
 // ---- sections ---------------------------------------------------------------
 
 std::string renderHeader() {
     std::string out;
     out += "══ sysperf " SYSPERF_VERSION;
-    for (int i = static_cast<int>(out.size()); i < 64; ++i) out += '═';
+    for (int i = static_cast<int>(out.size()); i < 64; ++i) out += THICK_HLINE;
     out += '\n';
     return out;
 }
@@ -37,7 +41,7 @@ std::string renderHeader() {
 std::string renderCpu(const CpuInfo& c) {
     std::string out;
     out += "\n── CPU ";
-    for (int i = 6; i < 64; ++i) out += '─';
+    for (int i = 6; i < 64; ++i) out += HLINE;
     out += '\n';
 
     out += "  Total:  " + padRight(pct(c.total_pct).toStdString(), 14);
@@ -54,7 +58,7 @@ std::string renderCpu(const CpuInfo& c) {
 std::string renderMem(const MemInfo& m) {
     std::string out;
     out += "\n── Memory ";
-    for (int i = 10; i < 64; ++i) out += '─';
+    for (int i = 10; i < 64; ++i) out += HLINE;
     out += '\n';
 
     double usedPct = (m.total > 0) ? 100.0 * static_cast<double>(m.used)
@@ -80,7 +84,7 @@ std::string renderDisks(const std::vector<DiskSample>& disks) {
     if (disks.empty()) return {};
     std::string out;
     out += "\n── Disk ";
-    for (int i = 8; i < 64; ++i) out += '─';
+    for (int i = 8; i < 64; ++i) out += HLINE;
     out += '\n';
 
     for (const auto& d : disks) {
@@ -98,7 +102,7 @@ std::string renderNets(const std::vector<NetSample>& nets) {
     if (nets.empty()) return {};
     std::string out;
     out += "\n── Network ";
-    for (int i = 11; i < 64; ++i) out += '─';
+    for (int i = 11; i < 64; ++i) out += HLINE;
     out += '\n';
 
     for (const auto& n : nets) {
@@ -114,7 +118,7 @@ std::string renderGpus(const std::vector<GpuSample>& gpus) {
     if (gpus.empty()) return {};
     std::string out;
     out += "\n── GPU ";
-    for (int i = 7; i < 64; ++i) out += '─';
+    for (int i = 7; i < 64; ++i) out += HLINE;
     out += '\n';
 
     for (const auto& g : gpus) {
@@ -136,7 +140,7 @@ std::string renderGpus(const std::vector<GpuSample>& gpus) {
 std::string renderSelf(const SelfMetrics& m) {
     std::string out;
     out += "\n── Self ";
-    for (int i = 8; i < 64; ++i) out += '─';
+    for (int i = 8; i < 64; ++i) out += HLINE;
     out += '\n';
 
     out += "  PSS:  " + padRight(b(m.pss_bytes).toStdString(), 14);
