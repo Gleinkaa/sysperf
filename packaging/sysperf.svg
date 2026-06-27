@@ -1,15 +1,65 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!-- Generic line-graph glyph. No hardware/vendor references. -->
 <svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128">
-  <rect x="8" y="8" width="112" height="112" rx="16" fill="#1f2733"/>
-  <g fill="none" stroke="#3a4757" stroke-width="2">
-    <line x1="20" y1="40" x2="108" y2="40"/>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0d1117"/>
+      <stop offset="100%" stop-color="#161b22"/>
+    </linearGradient>
+    <linearGradient id="bar1" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0%" stop-color="#2e9ef0"/>
+      <stop offset="100%" stop-color="#00d4ff"/>
+    </linearGradient>
+    <linearGradient id="bar2" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0%" stop-color="#9b59d0"/>
+      <stop offset="100%" stop-color="#e056fd"/>
+    </linearGradient>
+    <linearGradient id="bar3" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0%" stop-color="#27ae60"/>
+      <stop offset="100%" stop-color="#00ff88"/>
+    </linearGradient>
+    <linearGradient id="bar4" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0%" stop-color="#16a085"/>
+      <stop offset="100%" stop-color="#00ffcc"/>
+    </linearGradient>
+    <linearGradient id="spark" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#2e9ef0" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#00d4ff" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="2" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background pill -->
+  <rect x="4" y="4" width="120" height="120" rx="20" fill="url(#bg)" stroke="#30363d" stroke-width="1.5"/>
+
+  <!-- Grid lines -->
+  <g stroke="#21262d" stroke-width="1.5">
+    <line x1="20" y1="44" x2="108" y2="44"/>
     <line x1="20" y1="64" x2="108" y2="64"/>
-    <line x1="20" y1="88" x2="108" y2="88"/>
+    <line x1="20" y1="84" x2="108" y2="84"/>
   </g>
-  <polygon points="20,96 36,72 52,82 68,48 84,60 100,32 108,32 108,96"
-           fill="#2e9ef0" fill-opacity="0.25"/>
-  <polyline points="20,96 36,72 52,82 68,48 84,60 100,32 108,32"
-            fill="none" stroke="#2e9ef0" stroke-width="4"
+
+  <!-- Sparkline glow layer -->
+  <polyline points="22,96 36,74 48,80 60,54 72,64 86,42 100,30 108,36"
+            fill="none" stroke="#2e9ef0" stroke-width="6" opacity="0.3"
+            stroke-linecap="round" stroke-linejoin="round" filter="url(#glow)"/>
+
+  <!-- Sparkline -->
+  <polyline points="22,96 36,74 48,80 60,54 72,64 86,42 100,30 108,36"
+            fill="none" stroke="#00d4ff" stroke-width="2.5"
             stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Animated-style bars rising from bottom-right corner -->
+  <rect x="64" y="72" width="10" height="24" rx="2" fill="url(#bar3)" opacity="0.9"/>
+  <rect x="78" y="52" width="10" height="44" rx="2" fill="url(#bar1)" opacity="0.9"/>
+  <rect x="92" y="36" width="10" height="60" rx="2" fill="url(#bar2)" opacity="0.9"/>
+  <rect x="106" y="44" width="10" height="52" rx="2" fill="url(#bar4)" opacity="0.9"/>
+
+  <!-- Pulse dot -->
+  <circle cx="108" cy="36" r="3" fill="#00d4ff" filter="url(#glow)"/>
+
+  <!-- "S" monogram in top-left -->
+  <text x="28" y="34" font-family="monospace" font-size="22" font-weight="bold"
+        fill="#8b949e" letter-spacing="-2">S</text>
 </svg>
