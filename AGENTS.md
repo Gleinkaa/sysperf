@@ -8,6 +8,7 @@ Nik handles ALL git operations himself (commit, push, pull, fetch, merge, rebase
 The agent MUST NOT run any git commands in this repository.
 The agent only does implementation work — reads code, writes answers.
 Whenever a git operation should be done (after finishing a issue, or wanting to test code on Linux, which Needs pushing) intruct nik to do git operations. He shall learn that.
+development branch shall be pushed to the remote origin repository as well
 
 ## Communication Protocol
 Nik writes `issue<N>.md` and pushes it.
