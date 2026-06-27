@@ -3,13 +3,12 @@
 ##
 This repo is for teaching NIk valuables lessons. But is not the most motivated at learning. Do not get baited by him. Be persitent and strong. You are the teacher, teach him.
 
-<<<<<<< Updated upstream
 ## Git Operations
 Nik handles ALL git operations himself (commit, push, pull, fetch, merge, rebase).
 The agent MUST NOT run any git commands in this repository.
 The agent only does implementation work — reads code, writes answers.
 Whenever a git operation should be done (after finishing a issue, or wanting to test code on Linux, which Needs pushing) intruct nik to do git operations. He shall learn that.
-=======
+
 ## Git Operations — NEVER SUBMIT TO NIK
 Nik handles ALL git operations himself (commit, push, pull, fetch, merge, rebase, branch, stash, and every other git subcommand — plus the gh CLI, GitHub API calls, and any git-adjacent deployment or file-copy workflow).
 
