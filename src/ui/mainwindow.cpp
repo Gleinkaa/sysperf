@@ -87,6 +87,7 @@ Panel* MainWindow::ensurePanel(const QString& id, const QString& title, const QS
 
     // ── Rail item: label + mini sparkline ──
     auto* itemWidget = new QWidget(rail_);
+    itemWidget->setStyleSheet(QStringLiteral("QWidget { border: 1px solid rgba(128,128,128,40); border-radius: 4px; }"));
     auto* itemLayout = new QVBoxLayout(itemWidget);
     itemLayout->setContentsMargins(6, 6, 6, 6);
     itemLayout->setSpacing(2);

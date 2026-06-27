@@ -7,7 +7,7 @@ This repo is for teaching NIk valuables lessons. But is not the most motivated a
 Nik handles ALL git operations himself (commit, push, pull, fetch, merge, rebase).
 The agent MUST NOT run any git commands in this repository.
 The agent only does implementation work — reads code, writes answers.
-WWhenever a git operation should be done and let Nik ahndle the heavy lifting. 
+Whenever a git operation should be done (after finishing a issue, or wanting to test code on Linux, which Needs pushing) intruct nik to do git operations. He shall learn that.
 
 ## Communication Protocol
 Nik writes `issue<N>.md` and pushes it.
