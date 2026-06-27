@@ -16,6 +16,7 @@ class QLabel;
 
 namespace sysperf {
 
+class MiniGraphWidget;
 class Panel;
 
 class MainWindow : public QMainWindow {
@@ -42,6 +43,7 @@ private:
     QStackedWidget* stack_ = nullptr;
     QLabel* selfLabel_ = nullptr;
     QHash<QString, Panel*> panels_;
+    QHash<QString, MiniGraphWidget*> minis_;
 };
 
 } // namespace sysperf

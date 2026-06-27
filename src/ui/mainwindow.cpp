@@ -8,6 +8,7 @@
 #include <QMessageBox>
 #include <QStackedWidget>
 #include <QStatusBar>
+#include <QVBoxLayout>
 #include <QVector>
 #include <QWidget>
 
@@ -16,6 +17,7 @@
 #include "ui/corebars.h"
 #include "ui/format.h"
 #include "ui/graphwidget.h"
+#include "ui/minigraph.h"
 #include "ui/panel.h"
 #include "version.h"
 
@@ -27,6 +29,13 @@ const QColor kMemLine(0x9b, 0x59, 0xd0), kMemFill(0x9b, 0x59, 0xd0);
 const QColor kDiskLine(0x27, 0xae, 0x60), kDiskFill(0x27, 0xae, 0x60);
 const QColor kNetRx(0x16, 0xa0, 0x85), kNetTx(0xe0, 0x7b, 0x39);
 const QColor kGpuLine(0xe0, 0x4f, 0x5f), kGpuFill(0xe0, 0x4f, 0x5f);
+
+// Mini-graph colours: same palette, brighter fill for visibility at tiny size.
+const QColor kMiniCpuLine(0x2e, 0x9e, 0xf0), kMiniCpuFill(0x2e, 0x9e, 0xf0);
+const QColor kMiniMemLine(0x9b, 0x59, 0xd0), kMiniMemFill(0x9b, 0x59, 0xd0);
+const QColor kMiniDiskLine(0x27, 0xae, 0x60), kMiniDiskFill(0x27, 0xae, 0x60);
+const QColor kMiniNetLine(0x16, 0xa0, 0x85), kMiniNetFill(0x16, 0xa0, 0x85);
+const QColor kMiniGpuLine(0xe0, 0x4f, 0x5f), kMiniGpuFill(0xe0, 0x4f, 0x5f);
 } // namespace
 
 MainWindow::MainWindow(AppConfig cfg, QWidget* parent) : QMainWindow(parent), cfg_(std::move(cfg)) {
@@ -38,8 +47,8 @@ MainWindow::MainWindow(AppConfig cfg, QWidget* parent) : QMainWindow(parent), cf
     h->setSpacing(0);
 
     rail_ = new QListWidget(central);
-    rail_->setMaximumWidth(190);
-    rail_->setMinimumWidth(150);
+    rail_->setMaximumWidth(240);
+    rail_->setMinimumWidth(200);
     rail_->setSpacing(2);
     rail_->setFrameShape(QFrame::NoFrame);
 
@@ -71,10 +80,43 @@ MainWindow::MainWindow(AppConfig cfg, QWidget* parent) : QMainWindow(parent), cf
 Panel* MainWindow::ensurePanel(const QString& id, const QString& title, const QString& railName) {
     auto it = panels_.find(id);
     if (it != panels_.end()) return it.value();
+
     auto* p = new Panel(title);
-    rail_->addItem(railName);
     stack_->addWidget(p);
     panels_.insert(id, p);
+
+    // ── Rail item: label + mini sparkline ──
+    auto* itemWidget = new QWidget(rail_);
+    auto* itemLayout = new QVBoxLayout(itemWidget);
+    itemLayout->setContentsMargins(6, 6, 6, 6);
+    itemLayout->setSpacing(2);
+
+    auto* nameLbl = new QLabel(railName, itemWidget);
+    QFont nf = nameLbl->font();
+    nf.setBold(true);
+    nameLbl->setFont(nf);
+    itemLayout->addWidget(nameLbl);
+
+    auto* mini = new MiniGraphWidget(itemWidget);
+    mini->setCapacity(cfg_.history_seconds);
+
+    // Pick colour by subsystem prefix.
+    QColor line, fill;
+    if (id == "cpu")            { line = kMiniCpuLine; fill = kMiniCpuFill; }
+    else if (id == "mem")       { line = kMiniMemLine; fill = kMiniMemFill; }
+    else if (id.startsWith("disk:")) { line = kMiniDiskLine; fill = kMiniDiskFill; }
+    else if (id.startsWith("net:"))  { line = kMiniNetLine; fill = kMiniNetFill; }
+    else if (id.startsWith("gpu:"))  { line = kMiniGpuLine; fill = kMiniGpuFill; }
+    mini->setColor(line, fill);
+
+    itemLayout->addWidget(mini);
+
+    auto* item = new QListWidgetItem();
+    item->setSizeHint(QSize(200, 50));
+    rail_->addItem(item);
+    rail_->setItemWidget(item, itemWidget);
+
+    minis_.insert(id, mini);
     return p;
 }
 
@@ -120,6 +162,8 @@ void MainWindow::updateCpu(const Snapshot& s) {
     const CpuInfo& c = s.cpu;
     p->graph()->addSample(c.total_pct);
 
+    if (auto* mini = minis_.value("cpu")) mini->addSample(c.total_pct);
+
     QVector<double> cores;
     cores.reserve(static_cast<int>(c.per_core_pct.size()));
     double maxCore = 0.0;
@@ -144,6 +188,8 @@ void MainWindow::updateMem(const Snapshot& s) {
     const MemInfo& m = s.mem;
     double usedPct = (m.total > 0) ? 100.0 * static_cast<double>(m.used) / static_cast<double>(m.total) : 0.0;
     p->graph()->addSample(usedPct);
+
+    if (auto* mini = minis_.value("mem")) mini->addSample(usedPct);
 
     p->setHeadline(QStringLiteral("%1 / %2").arg(fmt::bytes(m.used), fmt::bytes(m.total)));
     p->setStat("inuse", fmt::bytes(m.used));
@@ -175,6 +221,8 @@ void MainWindow::updateDisks(const Snapshot& s) {
         }
         p->graph()->addSample(d.util_pct);
         p->setHeadline(fmt::percent(d.util_pct, 1));
+
+        if (auto* mini = minis_.value(id)) mini->addSample(d.util_pct);
         p->setStat("active", fmt::percent(d.util_pct, 1));
         p->setStat("read", fmt::rate(d.read_bps));
         p->setStat("write", fmt::rate(d.write_bps));
@@ -201,6 +249,8 @@ void MainWindow::updateNets(const Snapshot& s) {
         }
         p->graph()->addSample(n.rx_bps, n.tx_bps);
         p->setHeadline(tr("R %1   ·   S %2").arg(fmt::rate(n.rx_bps), fmt::rate(n.tx_bps)));
+
+        if (auto* mini = minis_.value(id)) mini->addSample(n.rx_bps);
         p->setStat("recv", fmt::rate(n.rx_bps));
         p->setStat("send", fmt::rate(n.tx_bps));
         p->setStat("link", fmt::linkSpeed(n.speed_mbps));
@@ -228,6 +278,8 @@ void MainWindow::updateGpus(const Snapshot& s) {
         double u = (g.util_pct >= 0.0) ? g.util_pct : 0.0;
         p->graph()->addSample(u);
         p->setHeadline(g.util_pct >= 0.0 ? fmt::percent(g.util_pct, 0) : tr("—"));
+
+        if (auto* mini = minis_.value(id)) mini->addSample(u);
         p->setStat("util", g.util_pct >= 0.0 ? fmt::percent(g.util_pct, 0) : tr("—"));
         p->setStat("mem", g.mem_total > 0
                               ? QStringLiteral("%1 / %2").arg(fmt::bytes(g.mem_used),

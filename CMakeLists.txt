@@ -79,6 +79,7 @@ if(SYSPERF_BUILD_GUI)
     src/collector/worker.cpp
     src/ui/mainwindow.cpp
     src/ui/graphwidget.cpp
+    src/ui/minigraph.cpp
     src/ui/corebars.cpp
     src/ui/panel.cpp
     src/ui/format.cpp
