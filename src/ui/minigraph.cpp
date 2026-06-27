@@ -42,9 +42,21 @@ void MiniGraphWidget::paintEvent(QPaintEvent*) {
     if (w <= 2 || h <= 2) return;
 
     const QPalette& pal = palette();
-    QColor bg = pal.color(QPalette::Base);
 
+    // Fill with a slightly darker shade than the parent so the mini-graph
+    // widget is visually distinct — otherwise it blends into the rail.
+    QColor base = pal.color(QPalette::Base);
+    QColor bg = base.darker(115); // ~13% darker, works on light + dark themes
     p.fillRect(r, bg);
+
+    // ── Border: visible 1px outline so the mini-graph rectangle is clear. ──
+    QColor borderColor = pal.color(QPalette::WindowText);
+    borderColor.setAlpha(80);
+    QPen borderPen(borderColor);
+    borderPen.setWidth(0);  // cosmetic → 1 device pixel
+    p.setPen(borderPen);
+    p.setBrush(Qt::NoBrush);
+    p.drawRect(r);
 
     const int n = static_cast<int>(samples_.size());
     if (n < 1) return;
