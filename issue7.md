@@ -1,0 +1,1 @@
+The RAM tab should not only show me the capacitiy, but also read and write speeds in 2 seperate diagrams. The two ne ones hsall by side by side, the capacity shall be as wide as them. The graphs shall ahve equal heights
